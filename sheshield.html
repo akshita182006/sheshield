@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SheShield – Real-Time Women's Safety</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --rose:#D4537E;--rose-light:#FBEAF0;--rose-mid:#ED93B1;--rose-dark:#72243E;
+  --teal:#1D9E75;--teal-light:#E1F5EE;--teal-dark:#085041;
+  --ink:#2C2C2A;--muted:#5F5E5A;--soft:#F1EFE8;--white:#fff;
+  --border:#e8e4df;--radius:16px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--white);overflow-x:hidden;}
+
+/* ── PAGE SYSTEM ── */
+.page{display:none;min-height:100vh;animation:fadeIn .35s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── NAV ── */
+nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;border-bottom:.5px solid var(--border);position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);z-index:200;}
+.logo{font-family:'Playfair Display',serif;font-size:1.45rem;color:var(--rose-dark);letter-spacing:-.02em;cursor:pointer;}
+.logo span{color:var(--teal);}
+nav ul{list-style:none;display:flex;gap:1.8rem;align-items:center;}
+nav ul a{text-decoration:none;color:var(--muted);font-size:.88rem;font-weight:500;transition:color .2s;cursor:pointer;}
+nav ul a:hover{color:var(--rose);}
+.nav-cta{background:var(--rose);color:#fff!important;padding:.45rem 1.1rem;border-radius:50px;font-size:.84rem!important;}
+.nav-cta:hover{background:var(--rose-dark)!important;}
+
+/* ── BUTTONS ── */
+.btn-primary{background:var(--rose);color:#fff;padding:.8rem 1.9rem;border-radius:50px;font-weight:500;font-size:.95rem;border:none;cursor:pointer;transition:transform .15s,background .2s;text-decoration:none;display:inline-block;}
+.btn-primary:hover{background:var(--rose-dark);transform:translateY(-2px);}
+.btn-outline{border:1.5px solid var(--ink);color:var(--ink);padding:.8rem 1.9rem;border-radius:50px;font-size:.95rem;font-weight:500;cursor:pointer;transition:all .2s;text-decoration:none;display:inline-block;background:transparent;}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal);}
+.btn-teal{background:var(--teal);color:#fff;padding:.8rem 1.9rem;border-radius:50px;font-weight:500;font-size:.95rem;border:none;cursor:pointer;transition:background .2s,transform .15s;}
+.btn-teal:hover{background:var(--teal-dark);transform:translateY(-2px);}
+.btn-white{background:#fff;color:var(--rose-dark);padding:.85rem 2.1rem;border-radius:50px;font-weight:600;font-size:.95rem;border:none;cursor:pointer;transition:transform .15s;display:inline-block;text-decoration:none;}
+.btn-white:hover{transform:translateY(-2px);}
+
+/* ════════════════════════════
+   PAGE 1 — LANDING
+════════════════════════════ */
+.hero{min-height:90vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:4rem;padding:5rem 2.5rem 4rem;max-width:1200px;margin:0 auto;}
+.hero-text h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,4.5vw,3.6rem);line-height:1.15;margin-bottom:1.2rem;}
+.hero-text h1 em{color:var(--rose);font-style:italic;}
+.hero-text p{font-size:1rem;color:var(--muted);line-height:1.78;max-width:440px;margin-bottom:2rem;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.section-label{font-size:.78rem;letter-spacing:.12em;color:var(--rose);font-weight:500;text-transform:uppercase;margin-bottom:.5rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,3.2vw,2.6rem);color:var(--ink);margin-bottom:2.5rem;line-height:1.2;}
+
+/* phone mockup */
+.hero-visual{display:flex;justify-content:center;align-items:center;}
+.phone-frame{width:255px;background:#1a1a1a;border-radius:40px;padding:13px;box-shadow:0 40px 80px rgba(0,0,0,.18),0 0 0 1px #333;}
+.phone-screen{background:#fff;border-radius:28px;overflow:hidden;}
+.phone-status{background:#f9f5f2;padding:10px 16px 6px;font-size:10px;color:#888;display:flex;justify-content:space-between;}
+.phone-header{background:var(--rose);padding:15px;color:#fff;}
+.phone-header h3{font-family:'Playfair Display',serif;font-size:1.15rem;margin-bottom:2px;}
+.phone-header p{font-size:.68rem;opacity:.85;}
+.phone-body{padding:14px;}
+.mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
+.mode-card{background:var(--soft);border-radius:11px;padding:11px 8px;text-align:center;}
+.mode-icon{font-size:1.2rem;margin-bottom:3px;}
+.mode-label{font-size:.63rem;font-weight:500;color:var(--ink);}
+.sos-btn-phone{width:100%;background:var(--rose);color:#fff;border:none;border-radius:50px;padding:12px;font-size:.9rem;font-weight:700;letter-spacing:.06em;cursor:pointer;}
+.helper-preview{margin-top:10px;background:var(--teal-light);border-radius:11px;padding:9px 11px;display:flex;align-items:center;gap:9px;}
+.helper-avatar{width:30px;height:30px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:600;flex-shrink:0;}
+.helper-info p{font-size:.68rem;font-weight:600;color:var(--teal-dark);margin-bottom:1px;}
+.helper-info span{font-size:.62rem;color:var(--teal);}
+.online-dot{width:7px;height:7px;background:var(--teal);border-radius:50%;margin-top:2px;margin-left:auto;}
+
+.stats-bar{background:var(--ink);color:#fff;display:flex;justify-content:center;gap:4rem;padding:2rem;flex-wrap:wrap;}
+.stat{text-align:center;}
+.stat-num{font-family:'Playfair Display',serif;font-size:1.9rem;color:var(--rose-light);display:block;}
+.stat-label{font-size:.75rem;opacity:.6;margin-top:2px;}
+
+.section{padding:4.5rem 2.5rem;max-width:1200px;margin:0 auto;}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.4rem;}
+.feature-card{border:.5px solid var(--border);border-radius:var(--radius);padding:1.8rem;transition:border-color .2s,transform .2s;}
+.feature-card:hover{border-color:var(--rose);transform:translateY(-4px);}
+.feature-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.25rem;margin-bottom:.9rem;}
+.icon-rose{background:var(--rose-light);}
+.icon-teal{background:var(--teal-light);}
+.feature-card h3{font-size:1rem;font-weight:500;margin-bottom:.45rem;}
+.feature-card p{font-size:.85rem;color:var(--muted);line-height:1.65;}
+
+.modes-section{background:var(--soft);padding:4.5rem 2.5rem;}
+.modes-inner{max-width:1200px;margin:0 auto;}
+.modes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.2rem;}
+.mode-tile{background:#fff;border-radius:var(--radius);padding:1.7rem 1.4rem;border:.5px solid var(--border);}
+.mode-tile .icon-circle{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.9rem;}
+.mode-tile h4{font-size:.97rem;font-weight:500;margin-bottom:.38rem;}
+.mode-tile p{font-size:.8rem;color:var(--muted);line-height:1.6;}
+
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;}
+.step{text-align:center;padding:1rem;}
+.step-num{width:46px;height:46px;background:var(--rose);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.25rem;margin:0 auto 1rem;}
+.step h4{font-size:.97rem;font-weight:500;margin-bottom:.38rem;}
+.step p{font-size:.83rem;color:var(--muted);line-height:1.65;}
+
+.roles-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+.role-card{border-radius:var(--radius);padding:2.3rem;}
+.role-card.seeker{background:var(--rose-light);border:.5px solid #f4c0d1;}
+.role-card.helper{background:var(--teal-light);border:.5px solid #9fe1cb;}
+.role-tag{display:inline-block;font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:.28rem .7rem;border-radius:50px;margin-bottom:.9rem;}
+.seeker .role-tag{background:var(--rose);color:#fff;}
+.helper .role-tag{background:var(--teal);color:#fff;}
+.role-card h3{font-family:'Playfair Display',serif;font-size:1.45rem;margin-bottom:.7rem;}
+.seeker h3{color:var(--rose-dark);}
+.helper h3{color:var(--teal-dark);}
+.role-card ul{list-style:none;}
+.role-card ul li{font-size:.88rem;color:var(--muted);padding:.38rem 0 .38rem 1.2rem;position:relative;}
+.role-card ul li::before{content:'✓';position:absolute;left:0;font-weight:700;}
+.seeker ul li::before{color:var(--rose);}
+.helper ul li::before{color:var(--teal);}
+
+.cta-section{background:var(--rose-dark);color:#fff;text-align:center;padding:5.5rem 2rem;}
+.cta-section h2{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,3.8vw,2.9rem);margin-bottom:1rem;}
+.cta-section p{opacity:.85;max-width:460px;margin:0 auto 2rem;line-height:1.7;}
+
+footer{background:var(--ink);color:#fff;padding:2.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+footer .logo{color:#fff;}
+footer .logo span{color:#9FE1CB;}
+footer p{font-size:.78rem;opacity:.45;}
+
+/* ════════════════════════════
+   PAGE 2 — LOGIN / SIGN UP
+════════════════════════════ */
+.auth-page{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;}
+.auth-left{background:var(--rose-dark);padding:3rem;display:flex;flex-direction:column;justify-content:center;color:#fff;position:relative;overflow:hidden;}
+.auth-left::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(255,255,255,.05);top:-100px;right:-100px;}
+.auth-left::after{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.04);bottom:-80px;left:-80px;}
+.auth-left-content{position:relative;z-index:1;max-width:380px;}
+.auth-left h2{font-family:'Playfair Display',serif;font-size:2.5rem;margin-bottom:1rem;line-height:1.2;}
+.auth-left p{opacity:.8;line-height:1.75;margin-bottom:2rem;}
+.auth-features{display:flex;flex-direction:column;gap:.75rem;}
+.auth-feature{display:flex;align-items:center;gap:.75rem;font-size:.88rem;opacity:.9;}
+.auth-feature-icon{width:32px;height:32px;background:rgba(255,255,255,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+
+.auth-right{padding:3rem;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+.auth-form-wrap{width:100%;max-width:400px;}
+.auth-tabs{display:flex;gap:0;background:var(--soft);border-radius:50px;padding:4px;margin-bottom:2rem;}
+.auth-tab{flex:1;padding:.6rem;text-align:center;border-radius:50px;cursor:pointer;font-size:.88rem;font-weight:500;color:var(--muted);transition:all .2s;}
+.auth-tab.active{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1);}
+.auth-form h3{font-family:'Playfair Display',serif;font-size:1.6rem;margin-bottom:.4rem;}
+.auth-form p.sub{color:var(--muted);font-size:.88rem;margin-bottom:1.8rem;}
+.form-group{margin-bottom:1.2rem;}
+.form-group label{display:block;font-size:.82rem;font-weight:500;color:var(--ink);margin-bottom:.4rem;}
+.form-group input,.form-group select{width:100%;padding:.75rem 1rem;border:.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);background:#fff;transition:border-color .2s;}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--rose);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.role-select{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:1.4rem;}
+.role-opt{border:.5px solid var(--border);border-radius:12px;padding:1rem;text-align:center;cursor:pointer;transition:all .2s;}
+.role-opt.selected-seeker{border-color:var(--rose);background:var(--rose-light);}
+.role-opt.selected-helper{border-color:var(--teal);background:var(--teal-light);}
+.role-opt .role-opt-icon{font-size:1.4rem;margin-bottom:.4rem;}
+.role-opt p{font-size:.8rem;font-weight:500;}
+.anon-toggle{display:flex;align-items:center;gap:.6rem;font-size:.83rem;color:var(--muted);margin-bottom:1.4rem;cursor:pointer;}
+.toggle-switch{width:36px;height:20px;background:#ddd;border-radius:50px;position:relative;transition:background .2s;}
+.toggle-switch.on{background:var(--rose);}
+.toggle-knob{width:14px;height:14px;background:#fff;border-radius:50%;position:absolute;top:3px;left:3px;transition:left .2s;}
+.toggle-switch.on .toggle-knob{left:19px;}
+.auth-divider{text-align:center;color:var(--muted);font-size:.8rem;margin:1rem 0;position:relative;}
+.auth-divider::before{content:'';position:absolute;top:50%;left:0;width:42%;height:.5px;background:var(--border);}
+.auth-divider::after{content:'';position:absolute;top:50%;right:0;width:42%;height:.5px;background:var(--border);}
+.forgot{font-size:.8rem;color:var(--rose);cursor:pointer;text-align:right;display:block;margin-top:-.6rem;margin-bottom:1.2rem;}
+
+/* ════════════════════════════
+   PAGE 3 — WOMEN'S DASHBOARD
+════════════════════════════ */
+.dashboard-layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 64px);}
+.sidebar{background:var(--ink);color:#fff;padding:1.5rem 0;}
+.sidebar-user{padding:.5rem 1.5rem 1.5rem;border-bottom:.5px solid rgba(255,255,255,.1);}
+.user-avatar{width:44px;height:44px;background:var(--rose);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:.95rem;color:#fff;margin-bottom:.6rem;}
+.sidebar-user p{font-size:.85rem;font-weight:500;}
+.sidebar-user span{font-size:.72rem;opacity:.5;}
+.sidebar-nav{padding:1rem 0;}
+.sidebar-nav a{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.5rem;font-size:.88rem;color:rgba(255,255,255,.65);cursor:pointer;transition:all .2s;text-decoration:none;}
+.sidebar-nav a:hover,.sidebar-nav a.active{background:rgba(255,255,255,.08);color:#fff;}
+.sidebar-nav a.active{border-left:3px solid var(--rose);}
+.sidebar-nav .nav-icon{font-size:1rem;width:20px;text-align:center;}
+.sidebar-section-label{padding:.5rem 1.5rem;font-size:.68rem;letter-spacing:.1em;opacity:.35;text-transform:uppercase;margin-top:.5rem;}
+
+.dash-main{background:var(--soft);padding:2rem;}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;}
+.dash-header h2{font-family:'Playfair Display',serif;font-size:1.7rem;}
+.dash-header p{font-size:.85rem;color:var(--muted);}
+.status-badge{display:flex;align-items:center;gap:.5rem;background:#fff;border:.5px solid var(--border);border-radius:50px;padding:.4rem 1rem;font-size:.82rem;font-weight:500;}
+.status-dot{width:8px;height:8px;background:var(--teal);border-radius:50%;}
+
+.sos-panel{background:var(--rose);border-radius:var(--radius);padding:2.5rem;color:#fff;text-align:center;margin-bottom:1.5rem;position:relative;overflow:hidden;}
+.sos-panel::before{content:'';position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.07);top:-80px;right:-80px;}
+.sos-panel h3{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative;}
+.sos-panel p{opacity:.85;font-size:.88rem;margin-bottom:1.5rem;position:relative;}
+.sos-big-btn{width:100px;height:100px;background:#fff;border-radius:50%;border:none;cursor:pointer;font-size:.85rem;font-weight:700;color:var(--rose-dark);margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;box-shadow:0 0 0 10px rgba(255,255,255,.15),0 0 0 20px rgba(255,255,255,.07);transition:transform .15s;}
+.sos-big-btn:hover{transform:scale(1.05);}
+.sos-big-btn .sos-icon{font-size:1.6rem;}
+.mode-pills{display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap;position:relative;}
+.mode-pill{background:rgba(255,255,255,.2);color:#fff;border:.5px solid rgba(255,255,255,.3);padding:.38rem .9rem;border-radius:50px;font-size:.78rem;cursor:pointer;transition:background .2s;}
+.mode-pill:hover,.mode-pill.active-pill{background:rgba(255,255,255,.35);}
+
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;}
+.dash-card{background:#fff;border-radius:var(--radius);padding:1.5rem;border:.5px solid var(--border);}
+.dash-card-title{font-size:.78rem;color:var(--muted);margin-bottom:1rem;text-transform:uppercase;letter-spacing:.07em;}
+.helpers-list{display:flex;flex-direction:column;gap:.75rem;}
+.helper-row{display:flex;align-items:center;gap:.75rem;}
+.h-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;color:#fff;flex-shrink:0;}
+.h-info{flex:1;}
+.h-info p{font-size:.85rem;font-weight:500;}
+.h-info span{font-size:.72rem;color:var(--muted);}
+.h-dist{font-size:.75rem;color:var(--teal);font-weight:500;}
+.activity-list{display:flex;flex-direction:column;gap:.75rem;}
+.activity-item{display:flex;align-items:flex-start;gap:.75rem;}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.activity-item p{font-size:.83rem;}
+.activity-item span{font-size:.72rem;color:var(--muted);}
+.journey-card{background:#fff;border-radius:var(--radius);padding:1.5rem;border:.5px solid var(--border);margin-bottom:1.2rem;}
+.journey-map{background:linear-gradient(135deg,#e8f4e8,#d4e8e0);border-radius:12px;height:140px;display:flex;align-items:center;justify-content:center;font-size:.85rem;color:var(--teal-dark);font-weight:500;margin-bottom:1rem;position:relative;overflow:hidden;}
+.map-pin{font-size:1.5rem;}
+.journey-info{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;}
+.j-stat{text-align:center;}
+.j-stat p{font-size:1.1rem;font-weight:500;color:var(--ink);}
+.j-stat span{font-size:.72rem;color:var(--muted);}
+
+/* ════════════════════════════
+   PAGE 4 — HELPER DASHBOARD
+════════════════════════════ */
+.helper-dash{background:#f0f7f5;}
+.helper-sidebar{background:var(--teal-dark);color:#fff;}
+.helper-sidebar .sidebar-nav a:hover,.helper-sidebar .sidebar-nav a.active{background:rgba(255,255,255,.08);}
+.helper-sidebar .sidebar-nav a.active{border-left-color:var(--teal-light);}
+.helper-user-avatar{background:var(--teal);}
+.availability-toggle{margin:1rem 1.5rem;background:rgba(255,255,255,.1);border-radius:12px;padding:1rem;}
+.avail-label{font-size:.72rem;opacity:.6;margin-bottom:.5rem;}
+.avail-switch{display:flex;align-items:center;gap:.6rem;}
+.big-toggle{width:52px;height:28px;background:rgba(255,255,255,.2);border-radius:50px;position:relative;cursor:pointer;transition:background .2s;}
+.big-toggle.online{background:var(--teal);}
+.big-toggle-knob{width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:4px;left:4px;transition:left .2s;}
+.big-toggle.online .big-toggle-knob{left:28px;}
+.avail-status{font-size:.85rem;font-weight:500;}
+
+.helper-main{background:var(--helper-dash,#f0f7f5);padding:2rem;}
+.request-alert{background:#fff;border:.5px solid var(--teal);border-radius:var(--radius);padding:1.5rem;margin-bottom:1.2rem;position:relative;overflow:hidden;}
+.request-alert::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--teal);}
+.alert-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
+.alert-badge{background:var(--teal-light);color:var(--teal-dark);font-size:.72rem;font-weight:600;padding:.25rem .7rem;border-radius:50px;display:flex;align-items:center;gap:.4rem;}
+.alert-time{font-size:.75rem;color:var(--muted);}
+.alert-user{display:flex;align-items:center;gap:.8rem;margin-bottom:1rem;}
+.alert-avatar{width:42px;height:42px;background:var(--rose-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.alert-info h4{font-size:.95rem;font-weight:500;}
+.alert-info p{font-size:.78rem;color:var(--muted);}
+.alert-detail{background:var(--soft);border-radius:10px;padding:.75rem 1rem;font-size:.82rem;color:var(--muted);margin-bottom:1rem;display:flex;gap:1.5rem;}
+.alert-actions{display:flex;gap:.75rem;}
+.btn-accept{background:var(--teal);color:#fff;padding:.6rem 1.4rem;border-radius:50px;font-size:.85rem;font-weight:500;border:none;cursor:pointer;flex:1;}
+.btn-decline{background:transparent;color:var(--muted);padding:.6rem 1.4rem;border-radius:50px;font-size:.85rem;font-weight:500;border:.5px solid var(--border);cursor:pointer;flex:1;}
+
+.helper-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.2rem;}
+.h-stat-card{background:#fff;border-radius:12px;padding:1.2rem;border:.5px solid var(--border);text-align:center;}
+.h-stat-num{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--teal-dark);display:block;}
+.h-stat-label{font-size:.72rem;color:var(--muted);}
+.history-card{background:#fff;border-radius:var(--radius);padding:1.5rem;border:.5px solid var(--border);}
+.history-item{display:flex;align-items:center;gap:.9rem;padding:.75rem 0;border-bottom:.5px solid var(--border);}
+.history-item:last-child{border-bottom:none;}
+.hist-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0;}
+.hist-info{flex:1;}
+.hist-info p{font-size:.85rem;font-weight:500;}
+.hist-info span{font-size:.72rem;color:var(--muted);}
+.hist-badge{font-size:.7rem;font-weight:500;padding:.2rem .6rem;border-radius:50px;}
+.badge-done{background:var(--teal-light);color:var(--teal-dark);}
+.badge-escort{background:var(--rose-light);color:var(--rose-dark);}
+
+/* ════════════════════════════
+   PAGE 5 — ABOUT
+════════════════════════════ */
+.about-hero{background:var(--ink);color:#fff;padding:6rem 2.5rem;text-align:center;position:relative;overflow:hidden;}
+.about-hero::before{content:'';position:absolute;width:600px;height:600px;border-radius:50%;background:rgba(212,83,126,.12);top:-200px;left:50%;transform:translateX(-50%);}
+.about-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2.4rem,5vw,3.8rem);margin-bottom:1rem;position:relative;}
+.about-hero h1 em{color:var(--rose-mid);font-style:italic;}
+.about-hero p{opacity:.75;max-width:560px;margin:0 auto;line-height:1.8;font-size:1.02rem;position:relative;}
+
+.mission-section{padding:5rem 2.5rem;max-width:1000px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.mission-text h2{font-family:'Playfair Display',serif;font-size:2.2rem;margin-bottom:1.2rem;line-height:1.2;}
+.mission-text p{color:var(--muted);line-height:1.8;margin-bottom:1rem;font-size:.95rem;}
+.mission-visual{background:var(--rose-light);border-radius:var(--radius);padding:2.5rem;text-align:center;}
+.mission-icon{font-size:4rem;margin-bottom:1rem;}
+.mission-visual h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--rose-dark);margin-bottom:.6rem;}
+.mission-visual p{font-size:.85rem;color:var(--muted);line-height:1.7;}
+
+.values-section{background:var(--soft);padding:4.5rem 2.5rem;}
+.values-inner{max-width:1100px;margin:0 auto;}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.4rem;}
+.value-card{background:#fff;border-radius:var(--radius);padding:1.8rem;border:.5px solid var(--border);}
+.value-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--rose-mid);margin-bottom:.5rem;}
+.value-card h4{font-size:1rem;font-weight:500;margin-bottom:.4rem;}
+.value-card p{font-size:.82rem;color:var(--muted);line-height:1.65;}
+
+.team-section{padding:5rem 2.5rem;max-width:1100px;margin:0 auto;}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;}
+.team-card{border-radius:var(--radius);border:.5px solid var(--border);overflow:hidden;transition:transform .2s;}
+.team-card:hover{transform:translateY(-4px);}
+.team-banner{height:90px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:0;}
+.team-avatar-wrap{width:72px;height:72px;border-radius:50%;border:3px solid #fff;overflow:hidden;margin:0 auto;transform:translateY(36px);background:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;}
+.team-info{padding:2.8rem 1.3rem 1.5rem;text-align:center;}
+.team-info h4{font-size:1rem;font-weight:500;margin-bottom:.25rem;}
+.team-info p{font-size:.78rem;color:var(--muted);}
+.team-info span{font-size:.72rem;color:var(--rose);}
+
+.tech-section{background:var(--ink);color:#fff;padding:4.5rem 2.5rem;}
+.tech-inner{max-width:1000px;margin:0 auto;}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.2rem;margin-top:2rem;}
+.tech-card{background:rgba(255,255,255,.07);border-radius:12px;padding:1.5rem;text-align:center;border:.5px solid rgba(255,255,255,.1);}
+.tech-card .tech-icon{font-size:2rem;margin-bottom:.6rem;}
+.tech-card h4{font-size:.92rem;font-weight:500;margin-bottom:.3rem;}
+.tech-card p{font-size:.75rem;opacity:.55;line-height:1.5;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;gap:2.5rem;padding:3rem 1.5rem;min-height:auto;}
+  .hero-visual{order:-1;}
+  .roles-grid,.auth-page,.mission-section{grid-template-columns:1fr;}
+  .auth-left{display:none;}
+  .dashboard-layout{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .helper-stats{grid-template-columns:1fr 1fr;}
+  nav ul{display:none;}
+  .dash-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAV ═══════════════════════════ -->
+<nav>
+  <div class="logo" onclick="showPage('landing')">She<span>Shield</span></div>
+  <ul>
+    <li><a onclick="showPage('landing')">Home</a></li>
+    <li><a onclick="showPage('about')">About</a></li>
+    <li><a onclick="showPage('login')">Login</a></li>
+    <li><a onclick="showPage('dashboard')" class="nav-cta">Get Safe</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 1 · LANDING
+═══════════════════════════════════════════════════════════════ -->
+<div id="page-landing" class="page active">
+
+  <section class="hero">
+    <div class="hero-text">
+      <p class="section-label">Real-Time Women's Safety</p>
+      <h1>Safety at the tap of a <em>button.</em></h1>
+      <p>SheShield instantly connects you with verified helpers the moment you need them — no browsing, no delay, no compromise.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showPage('login')">Request Help Now</button>
+        <button class="btn-outline" onclick="showPage('about')">Our Mission</button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●● 🔒</span></div>
+          <div class="phone-header"><h3>SheShield</h3><p>Protected · 3 helpers nearby</p></div>
+          <div class="phone-body">
+            <div class="mode-grid">
+              <div class="mode-card"><div class="mode-icon">🚨</div><div class="mode-label">Emergency</div></div>
+              <div class="mode-card"><div class="mode-icon">🚶‍♀️</div><div class="mode-label">Escort Me</div></div>
+              <div class="mode-card"><div class="mode-icon">📍</div><div class="mode-label">Track Journey</div></div>
+              <div class="mode-card"><div class="mode-icon">🤫</div><div class="mode-label">Silent Help</div></div>
+            </div>
+            <button class="sos-btn-phone" onclick="showPage('login')">⚡ REQUEST HELP</button>
+            <div class="helper-preview">
+              <div class="helper-avatar">P</div>
+              <div class="helper-info"><p>Priya S. — Officer</p><span>0.3 km · Online</span></div>
+              <div class="online-dot"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num">1-click</span><span class="stat-label">Help Request</span></div>
+    <div class="stat"><span class="stat-num">&lt; 60s</span><span class="stat-label">Avg Response</span></div>
+    <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Verified Helpers</span></div>
+    <div class="stat"><span class="stat-num">Anon</span><span class="stat-label">Option Available</span></div>
+  </div>
+
+  <section class="section" id="features">
+    <p class="section-label">Core Principles</p>
+    <h2 class="section-title">Built around what matters most</h2>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon icon-rose">⚡</div><h3>Instant Matching</h3><p>AI-driven logic assigns the nearest available helper the moment a request is raised. No manual searching required.</p></div>
+      <div class="feature-card"><div class="feature-icon icon-teal">🔒</div><h3>Privacy First</h3><p>Minimal identity exposure. Choose to remain anonymous. Helpers connect through our secure in-app channel.</p></div>
+      <div class="feature-card"><div class="feature-icon icon-rose">✅</div><h3>Verified Helpers Only</h3><p>Every helper is screened — female volunteers, police officers, or registered guardians you can trust.</p></div>
+      <div class="feature-card"><div class="feature-icon icon-teal">📡</div><h3>Real-Time Updates</h3><p>Live status and location tracking powered by Firebase so you always know help is on the way.</p></div>
+    </div>
+  </section>
+
+  <div class="modes-section">
+    <div class="modes-inner">
+      <p class="section-label">Help Modes</p>
+      <h2 class="section-title">Every situation, covered</h2>
+      <div class="modes-grid">
+        <div class="mode-tile"><div class="icon-circle" style="background:#FAECE7;">🚨</div><h4>Emergency Help</h4><p>Immediate response. Nearby helpers and emergency contacts notified instantly.</p></div>
+        <div class="mode-tile"><div class="icon-circle" style="background:#E1F5EE;">🚶‍♀️</div><h4>Escort Me Home</h4><p>A verified helper monitors your route until you arrive safely.</p></div>
+        <div class="mode-tile"><div class="icon-circle" style="background:#FBEAF0;">📍</div><h4>Journey Tracking</h4><p>Share your live location with trusted contacts for the duration of your trip.</p></div>
+        <div class="mode-tile"><div class="icon-circle" style="background:#F1EFE8;">🤫</div><h4>Silent Help</h4><p>No sounds, no visible alerts. Help is dispatched quietly when you can't draw attention.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <p class="section-label">How It Works</p>
+    <h2 class="section-title">Help in three simple steps</h2>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><h4>Choose your mode</h4><p>Select Emergency, Escort, Journey Track, or Silent with a single tap.</p></div>
+      <div class="step"><div class="step-num">2</div><h4>System auto-assigns</h4><p>Smart matching finds the most suitable verified helper nearby instantly.</p></div>
+      <div class="step"><div class="step-num">3</div><h4>Connect securely</h4><p>Your helper connects through our encrypted messaging or call channel.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <p class="section-label">Platform Roles</p>
+    <h2 class="section-title">A two-sided safety network</h2>
+    <div class="roles-grid">
+      <div class="role-card seeker">
+        <span class="role-tag">Help Seeker</span>
+        <h3>Women & Girls</h3>
+        <ul>
+          <li>Secure login with anonymous option</li>
+          <li>One-tap help request dashboard</li>
+          <li>Choose from 4 help modes</li>
+          <li>Real-time helper tracking</li>
+          <li>Private, encrypted communication</li>
+        </ul>
+      </div>
+      <div class="role-card helper">
+        <span class="role-tag">Verified Helper</span>
+        <h3>Volunteers & Officers</h3>
+        <ul>
+          <li>Register and get verified</li>
+          <li>Set online / offline availability</li>
+          <li>Receive real-time request alerts</li>
+          <li>Accept or decline requests</li>
+          <li>Connect via secure in-app channel</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-section">
+    <h2>Your safety network is ready</h2>
+    <p>Join SheShield today. Whether you need help or want to provide it — every role matters.</p>
+    <button class="btn-white" onclick="showPage('login')">Get Started — It's Free</button>
+  </div>
+
+  <footer>
+    <div class="logo">She<span>Shield</span></div>
+    <p>© 2025 SheShield · Real-Time Women's Safety Platform</p>
+    <p style="opacity:.35;font-size:.72rem;">React · Firebase · Smart Matching AI</p>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 2 · LOGIN / SIGN UP
+═══════════════════════════════════════════════════════════════ -->
+<div id="page-login" class="page">
+  <div class="auth-page">
+    <div class="auth-left">
+      <div class="auth-left-content">
+        <div class="logo" style="color:#fff;margin-bottom:2rem;font-size:1.7rem;">She<span style="color:#9FE1CB;">Shield</span></div>
+        <h2>Your safety, always one tap away.</h2>
+        <p>Join thousands of women who trust SheShield for real-time protection and instant verified assistance.</p>
+        <div class="auth-features">
+          <div class="auth-feature"><div class="auth-feature-icon">⚡</div><span>Instant helper matching in under 60 seconds</span></div>
+          <div class="auth-feature"><div class="auth-feature-icon">🔒</div><span>End-to-end encrypted. Anonymous option available</span></div>
+          <div class="auth-feature"><div class="auth-feature-icon">✅</div><span>100% verified helpers — police, volunteers, guardians</span></div>
+          <div class="auth-feature"><div class="auth-feature-icon">📍</div><span>Live journey tracking & silent distress mode</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-right">
+      <div class="auth-form-wrap">
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</div>
+          <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Sign Up</div>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <div id="form-login" class="auth-form">
+          <h3>Welcome back</h3>
+          <p class="sub">Sign in to access your safety dashboard</p>
+          <div class="form-group"><label>Email address</label><input type="email" placeholder="you@example.com"/></div>
+          <div class="form-group"><label>Password</label><input type="password" placeholder="••••••••"/></div>
+          <span class="forgot">Forgot password?</span>
+          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="showPage('dashboard')">Sign In</button>
+          <div class="auth-divider">or continue as</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;">
+            <button class="btn-outline" style="font-size:.82rem;padding:.6rem;" onclick="showPage('dashboard')">👤 Help Seeker</button>
+            <button class="btn-outline" style="font-size:.82rem;padding:.6rem;" onclick="showPage('helper-dashboard')">🛡️ Helper</button>
+          </div>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div id="form-signup" class="auth-form" style="display:none;">
+          <h3>Create account</h3>
+          <p class="sub">Join SheShield — choose your role below</p>
+          <div class="role-select">
+            <div class="role-opt selected-seeker" id="opt-seeker" onclick="selectRole('seeker')">
+              <div class="role-opt-icon">👩</div>
+              <p>Help Seeker</p>
+            </div>
+            <div class="role-opt" id="opt-helper" onclick="selectRole('helper')">
+              <div class="role-opt-icon">🛡️</div>
+              <p>Verified Helper</p>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>First name</label><input type="text" placeholder="Priya"/></div>
+            <div class="form-group"><label>Last name</label><input type="text" placeholder="Sharma"/></div>
+          </div>
+          <div class="form-group"><label>Email address</label><input type="email" placeholder="you@example.com"/></div>
+          <div class="form-group"><label>Phone number</label><input type="tel" placeholder="+91 98765 43210"/></div>
+          <div class="form-group"><label>Password</label><input type="password" placeholder="Create a strong password"/></div>
+          <div class="anon-toggle" onclick="toggleAnon()">
+            <div class="toggle-switch" id="anon-toggle"><div class="toggle-knob"></div></div>
+            <span>Enable anonymous mode (hide my identity from helpers)</span>
+          </div>
+          <button class="btn-primary" style="width:100%;" onclick="showPage('dashboard')">Create Account</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 3 · WOMEN'S DASHBOARD
+═══════════════════════════════════════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="dashboard-layout">
+    <div class="sidebar">
+      <div class="sidebar-user">
+        <div class="user-avatar">PS</div>
+        <p>Priya Sharma</p>
+        <span>Help Seeker · Anonymous</span>
+      </div>
+      <div class="sidebar-nav">
+        <p class="sidebar-section-label">Main</p>
+        <a class="active"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a><span class="nav-icon">🚨</span> Request Help</a>
+        <a><span class="nav-icon">📍</span> Journey Track</a>
+        <a><span class="nav-icon">🕒</span> History</a>
+        <p class="sidebar-section-label">Account</p>
+        <a><span class="nav-icon">👤</span> Profile</a>
+        <a><span class="nav-icon">🔒</span> Privacy</a>
+        <a><span class="nav-icon">🔔</span> Alerts</a>
+        <a onclick="showPage('landing')"><span class="nav-icon">↩</span> Sign Out</a>
+      </div>
+    </div>
+
+    <div class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h2>Good evening, Priya 👋</h2>
+          <p>You are in a safe zone. 3 helpers are available nearby.</p>
+        </div>
+        <div class="status-badge"><div class="status-dot"></div> Safe Zone Active</div>
+      </div>
+
+      <!-- SOS PANEL -->
+      <div class="sos-panel">
+        <h3>Need help right now?</h3>
+        <p>Select a mode and tap the button. A verified helper will be assigned instantly.</p>
+        <button class="sos-big-btn" onclick="alert('Help requested! Connecting you with Priya S. (0.3 km away)...')">
+          <span class="sos-icon">⚡</span>
+          <span style="font-size:.7rem;">SOS</span>
+        </button>
+        <div class="mode-pills">
+          <div class="mode-pill active-pill">🚨 Emergency</div>
+          <div class="mode-pill">🚶‍♀️ Escort Me</div>
+          <div class="mode-pill">📍 Journey Track</div>
+          <div class="mode-pill">🤫 Silent Help</div>
+        </div>
+      </div>
+
+      <!-- JOURNEY CARD -->
+      <div class="journey-card">
+        <div class="dash-card-title">Current Journey</div>
+        <div class="journey-map">
+          <span class="map-pin">📍</span>&nbsp; Sector 14 → Home · Live Tracking Active
+        </div>
+        <div class="journey-info">
+          <div class="j-stat"><p>1.8 km</p><span>Remaining</span></div>
+          <div class="j-stat"><p>~6 min</p><span>ETA</span></div>
+          <div class="j-stat"><p>2</p><span>Contacts Notified</span></div>
+        </div>
+      </div>
+
+      <div class="dash-grid">
+        <!-- NEARBY HELPERS -->
+        <div class="dash-card">
+          <div class="dash-card-title">Helpers Nearby</div>
+          <div class="helpers-list">
+            <div class="helper-row">
+              <div class="h-avatar" style="background:var(--teal);">PS</div>
+              <div class="h-info"><p>Priya S.</p><span>Police Officer · Verified</span></div>
+              <span class="h-dist">0.3 km</span>
+            </div>
+            <div class="helper-row">
+              <div class="h-avatar" style="background:var(--rose);">AM</div>
+              <div class="h-info"><p>Anjali M.</p><span>Volunteer · Verified</span></div>
+              <span class="h-dist">0.7 km</span>
+            </div>
+            <div class="helper-row">
+              <div class="h-avatar" style="background:#888;">RK</div>
+              <div class="h-info"><p>Rekha K.</p><span>Guardian · Verified</span></div>
+              <span class="h-dist">1.1 km</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="dash-card">
+          <div class="dash-card-title">Recent Activity</div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--teal);"></div>
+              <div><p>Journey tracking started</p><span>Today · 8:45 PM</span></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--rose);"></div>
+              <div><p>Escort request completed</p><span>Yesterday · 7:12 PM</span></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:#888;"></div>
+              <div><p>Profile verified</p><span>Apr 25 · 3:00 PM</span></div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--teal);"></div>
+              <div><p>2 trusted contacts added</p><span>Apr 24 · 11:20 AM</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 4 · HELPER DASHBOARD
+═══════════════════════════════════════════════════════════════ -->
+<div id="page-helper-dashboard" class="page">
+  <div class="dashboard-layout">
+    <div class="sidebar helper-sidebar">
+      <div class="sidebar-user">
+        <div class="user-avatar helper-user-avatar">AS</div>
+        <p>Anjali Singh</p>
+        <span>Verified Helper · Police</span>
+      </div>
+      <div class="availability-toggle">
+        <div class="avail-label">Availability</div>
+        <div class="avail-switch">
+          <div class="big-toggle online" id="avail-toggle" onclick="toggleAvail()"><div class="big-toggle-knob"></div></div>
+          <span class="avail-status" id="avail-status">Online</span>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <p class="sidebar-section-label">Main</p>
+        <a class="active"><span class="nav-icon">🏠</span> Dashboard</a>
+        <a><span class="nav-icon">🔔</span> Requests</a>
+        <a><span class="nav-icon">🗺️</span> Live Map</a>
+        <a><span class="nav-icon">📋</span> History</a>
+        <p class="sidebar-section-label">Account</p>
+        <a><span class="nav-icon">👤</span> Profile</a>
+        <a><span class="nav-icon">⭐</span> Reviews</a>
+        <a onclick="showPage('landing')"><span class="nav-icon">↩</span> Sign Out</a>
+      </div>
+    </div>
+
+    <div class="dash-main" style="background:#f0f7f5;">
+      <div class="dash-header">
+        <div>
+          <h2>Hello, Anjali 🛡️</h2>
+          <p>You have 1 incoming request and 4 completed today.</p>
+        </div>
+        <div class="status-badge" style="border-color:var(--teal);"><div class="status-dot"></div> Online · Accepting</div>
+      </div>
+
+      <!-- INCOMING REQUEST -->
+      <div class="request-alert">
+        <div class="alert-header">
+          <div class="alert-badge">🚨 Emergency Help</div>
+          <span class="alert-time">Just now · 0.3 km away</span>
+        </div>
+        <div class="alert-user">
+          <div class="alert-avatar">👩</div>
+          <div class="alert-info">
+            <h4>Anonymous User #2847</h4>
+            <p>Last seen: Sector 14, near Bus Stand</p>
+          </div>
+        </div>
+        <div class="alert-detail">
+          <span>📍 0.3 km away</span>
+          <span>⏱ Waiting 12s</span>
+          <span>🔒 Silent mode off</span>
+        </div>
+        <div class="alert-actions">
+          <button class="btn-accept" onclick="alert('Accepted! Connecting you securely with the user...')">Accept Request</button>
+          <button class="btn-decline">Decline</button>
+        </div>
+      </div>
+
+      <!-- STATS -->
+      <div class="helper-stats">
+        <div class="h-stat-card"><span class="h-stat-num">24</span><div class="h-stat-label">Total Assisted</div></div>
+        <div class="h-stat-card"><span class="h-stat-num">4</span><div class="h-stat-label">Today</div></div>
+        <div class="h-stat-card"><span class="h-stat-num">4.9★</span><div class="h-stat-label">Rating</div></div>
+        <div class="h-stat-card"><span class="h-stat-num">98%</span><div class="h-stat-label">Response Rate</div></div>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="history-card">
+        <div class="dash-card-title" style="margin-bottom:1rem;">Recent Requests Handled</div>
+        <div class="history-item">
+          <div class="hist-icon" style="background:var(--rose-light);">🚨</div>
+          <div class="hist-info"><p>Emergency Help · Anon #2839</p><span>Today · 6:42 PM · Sector 9</span></div>
+          <span class="hist-badge badge-done">Completed</span>
+        </div>
+        <div class="history-item">
+          <div class="hist-icon" style="background:var(--teal-light);">🚶‍♀️</div>
+          <div class="hist-info"><p>Escort Me Home · Anon #2801</p><span>Today · 5:10 PM · Main Market</span></div>
+          <span class="hist-badge badge-escort">Escort</span>
+        </div>
+        <div class="history-item">
+          <div class="hist-icon" style="background:var(--rose-light);">🚨</div>
+          <div class="hist-info"><p>Emergency Help · Anon #2790</p><span>Yesterday · 8:55 PM · Park Road</span></div>
+          <span class="hist-badge badge-done">Completed</span>
+        </div>
+        <div class="history-item">
+          <div class="hist-icon" style="background:var(--soft);">🤫</div>
+          <div class="hist-info"><p>Silent Help · Anon #2771</p><span>Yesterday · 7:20 PM · Station</span></div>
+          <span class="hist-badge badge-done">Completed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PAGE 5 · ABOUT
+═══════════════════════════════════════════════════════════════ -->
+<div id="page-about" class="page">
+  <div class="about-hero">
+    <h1>Built with <em>purpose,</em><br/>powered by care.</h1>
+    <p>SheShield was created because no woman should ever feel alone in a moment of fear. We build technology that bridges the gap between vulnerability and safety — instantly.</p>
+  </div>
+
+  <div class="mission-section">
+    <div class="mission-text">
+      <p class="section-label">Our Mission</p>
+      <h2>Safety should be a right, not a privilege.</h2>
+      <p>SheShield is a real-time women's safety platform that eliminates the delay between distress and assistance. We believe that in critical moments, every second counts — which is why our platform was designed to require just one tap.</p>
+      <p>We connect women to a verified network of helpers — police officers, female volunteers, and trusted guardians — through intelligent matching that considers proximity, availability, and response history.</p>
+      <button class="btn-primary" onclick="showPage('login')" style="margin-top:.5rem;">Join SheShield</button>
+    </div>
+    <div class="mission-visual">
+      <div class="mission-icon">🛡️</div>
+      <h3>A Secure Digital Safety Net</h3>
+      <p>Our platform operates 24/7, powered by Firebase real-time infrastructure and smart AI-assisted matching logic to ensure no request goes unanswered.</p>
+    </div>
+  </div>
+
+  <div class="values-section">
+    <div class="values-inner">
+      <p class="section-label">Our Values</p>
+      <h2 class="section-title">What drives every decision we make</h2>
+      <div class="values-grid">
+        <div class="value-card"><div class="value-num">01</div><h4>Speed</h4><p>Help must arrive faster than fear. One-click requests and under-60-second matching are non-negotiable standards.</p></div>
+        <div class="value-card"><div class="value-num">02</div><h4>Privacy</h4><p>Identities are protected by default. Anonymous mode, encrypted channels, and minimal data exposure are built in — not bolted on.</p></div>
+        <div class="value-card"><div class="value-num">03</div><h4>Trust</h4><p>Every helper is verified. We don't allow unvetted individuals on our platform — safety is only as strong as the people behind it.</p></div>
+        <div class="value-card"><div class="value-num">04</div><h4>Simplicity</h4><p>In moments of stress, complexity is dangerous. SheShield's interface is deliberately minimal so anyone can use it under pressure.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="team-section">
+    <p class="section-label">The Team</p>
+    <h2 class="section-title">People who care deeply</h2>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-banner" style="background:var(--rose-light);"><div class="team-avatar-wrap" style="background:var(--rose-light);">👩‍💼</div></div>
+        <div class="team-info"><h4>Sneha Kapoor</h4><p>Founder & CEO</p><span>Women's safety advocate</span></div>
+      </div>
+      <div class="team-card">
+        <div class="team-banner" style="background:var(--teal-light);"><div class="team-avatar-wrap" style="background:var(--teal-light);">👩‍💻</div></div>
+        <div class="team-info"><h4>Ritika Joshi</h4><p>Lead Engineer</p><span>React · Firebase · AI</span></div>
+      </div>
+      <div class="team-card">
+        <div class="team-banner" style="background:var(--soft);"><div class="team-avatar-wrap" style="background:var(--soft);">👮‍♀️</div></div>
+        <div class="team-info"><h4>DSP Meena Rao</h4><p>Safety Advisor</p><span>15 yrs law enforcement</span></div>
+      </div>
+      <div class="team-card">
+        <div class="team-banner" style="background:#E6F1FB;"><div class="team-avatar-wrap" style="background:#E6F1FB;">🎨</div></div>
+        <div class="team-info"><h4>Aisha Mirza</h4><p>Product Designer</p><span>UX for vulnerable users</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="tech-section">
+    <div class="tech-inner">
+      <p class="section-label" style="color:var(--rose-mid);">Technology</p>
+      <h2 class="section-title" style="color:#fff;">Built on modern, reliable infrastructure</h2>
+      <div class="tech-grid">
+        <div class="tech-card"><div class="tech-icon">⚛️</div><h4>React</h4><p>Fast, responsive frontend for seamless interaction</p></div>
+        <div class="tech-card"><div class="tech-icon">🔥</div><h4>Firebase</h4><p>Real-time database and secure authentication</p></div>
+        <div class="tech-card"><div class="tech-icon">🤖</div><h4>Smart Matching</h4><p>AI-assisted proximity and availability logic</p></div>
+        <div class="tech-card"><div class="tech-icon">🔐</div><h4>Encryption</h4><p>End-to-end encrypted messaging and calls</p></div>
+        <div class="tech-card"><div class="tech-icon">📡</div><h4>Live Tracking</h4><p>Real-time GPS journey monitoring</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2>Be part of the safety network</h2>
+    <p>Sign up as a help seeker or a verified helper. Together, we make every woman safer.</p>
+    <button class="btn-white" onclick="showPage('login')">Get Started Today</button>
+  </div>
+
+  <footer>
+    <div class="logo">She<span>Shield</span></div>
+    <p>© 2025 SheShield · Real-Time Women's Safety Platform</p>
+    <p style="opacity:.35;font-size:.72rem;">React · Firebase · Smart Matching AI</p>
+  </footer>
+</div>
+
+<script>
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function switchTab(tab){
+  document.getElementById('tab-login').classList.toggle('active',tab==='login');
+  document.getElementById('tab-signup').classList.toggle('active',tab==='signup');
+  document.getElementById('form-login').style.display=tab==='login'?'block':'none';
+  document.getElementById('form-signup').style.display=tab==='signup'?'block':'none';
+}
+function selectRole(role){
+  document.getElementById('opt-seeker').className='role-opt'+(role==='seeker'?' selected-seeker':'');
+  document.getElementById('opt-helper').className='role-opt'+(role==='helper'?' selected-helper':'');
+}
+function toggleAnon(){
+  const t=document.getElementById('anon-toggle');
+  t.classList.toggle('on');
+}
+function toggleAvail(){
+  const t=document.getElementById('avail-toggle');
+  const s=document.getElementById('avail-status');
+  t.classList.toggle('online');
+  s.textContent=t.classList.contains('online')?'Online':'Offline';
+}
+document.querySelectorAll('.mode-pill').forEach(pill=>{
+  pill.addEventListener('click',function(){
+    document.querySelectorAll('.mode-pill').forEach(p=>p.classList.remove('active-pill'));
+    this.classList.add('active-pill');
+  });
+});
+</script>
+</body>
+</html>
