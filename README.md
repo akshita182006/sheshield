@@ -32,6 +32,6 @@ User → Sends Request → System Processes → Helper Accepts → Connection Es
 ## Team
 
 SheShield AI
-Team Leader: Akshita
+Team members: Akshita , Anchal Pathania
 
-Team member: Anchal pathania
+
